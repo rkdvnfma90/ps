@@ -1,0 +1,12 @@
+{
+  "name": "ps",
+  "version": "1.0.0",
+  "description": "Problem Solving",
+  "main": "index.js",
+  "repository": "https://github.com/rkdvnfma90/ps.git",
+  "author": "aB <rkdvnfma90@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  }
+}

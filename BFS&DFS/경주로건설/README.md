@@ -5,7 +5,83 @@
 <br/>
 <br/>
 
-## 풀이
+
+## 성공한 풀이 (DFS)
+
+```js
+function solution(board) {
+  const n = board.length;
+
+  // 이렇게 각각 두개로 나누지 않는 방법을 찾아보자!
+  // 오른쪽 먼저 탐색하는 방향 배열
+  const rightDirections = [
+    [0, 1],
+    [1, 0],
+    [0, -1],
+    [-1, 0],
+  ];
+
+  // 아래쪽 먼저 탐색하는 방향 배열
+  const downDirections = [
+    [1, 0],
+    [0, 1],
+    [0, -1],
+    [-1, 0],
+  ];
+
+  // 코너 여부 체크 - 현재 방향과 다음 방향이 다를 경우 코너
+  const isCorner = (nowDir, nextDir) => {
+    return nowDir !== null && nowDir !== nextDir;
+  };
+
+  // 건설 가능 여부 체크 - 영역을 벗어나거나 벽일 경우 도로를 건설하지 못한다
+  const isNotBuild = (nx, ny) => {
+    return nx < 0 || ny < 0 || nx >= n || ny >= n || board[nx][ny] === 1;
+  };
+
+  // 다음오르 탐색할 칸이 이미 한 번 탐색 되었고 지금 sumCost 금액이 더 비쌀 경우
+  const isExpensive = (nx, ny, sumCost) => {
+    return board[nx][ny] !== 0 && sumCost > board[nx][ny];
+  };
+
+  const dfs = (x, y, cost, nowDir, directions) => {
+    directions.forEach(([dx, dy], nextDir) => {
+      const [nx, ny] = [x + dx, y + dy];
+
+      if (isNotBuild(nx, ny)) {
+        return;
+      }
+
+      const nextCost = isCorner(nowDir, nextDir) ? 600 : 100;
+
+      if (isExpensive(nx, ny, cost + nextCost)) {
+        return;
+      }
+
+      board[nx][ny] = cost + nextCost;
+
+      dfs(nx, ny, cost + nextCost, nextDir, directions);
+    });
+  };
+
+  // 맨 처음 시작 칸은 다시 탐색되면 안되므로 -1
+  board[0][0] = -1;
+
+  dfs(0, 0, 0, null, rightDirections);
+  dfs(0, 0, 0, null, downDirections);
+
+  return board[n - 1][n - 1];
+}
+```
+
+
+
+<br/>
+<br/>
+
+## 실패한 풀이 (BFS)
+
+25번 테스트 케이스 실패!
 
 ```js
 function solution(board) {
@@ -75,9 +151,3 @@ function solution(board) {
 }
 ```
 
-<br/>
-<br/>
-
-## 
-
-테스트 케이스 25번을 통과하지 못함 😭
